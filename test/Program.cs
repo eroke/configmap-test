@@ -19,10 +19,10 @@ namespace test
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration(conf =>
-                {
-                    conf.AddJsonFile("config.json", optional : true, reloadOnChange : true);
-                })
-                .UseStartup<Startup>();
+            .ConfigureAppConfiguration(conf =>
+            {
+                conf.AddJsonFile("conf/config.json", optional : true, reloadOnChange : true);
+            })
+            .UseStartup<Startup>();
     }
 }

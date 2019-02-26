@@ -38,7 +38,7 @@ spec:
     spec:
       containers:
         - name: configmap-test
-          image: expcat/configmap-test
+          image: expcat/configmap-test:1.1
           resources:
             limits:
               memory: "128Mi"
@@ -47,12 +47,8 @@ spec:
             - containerPort: 80
           volumeMounts:
             - name: config
-              mountPath: /app/config.json
-              subPath: config/config.json
+              mountPath: /app/conf
       volumes:
         - name: config
           configMap:
             name: configmap-test
-            items:
-              - key: config.json
-                path: config/config.json
