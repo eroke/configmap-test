@@ -4,10 +4,10 @@ EXPOSE 80
 
 FROM microsoft/dotnet:2.2-sdk AS build
 WORKDIR /src
-COPY ["test/test.csproj", "test/"]
-RUN dotnet restore "test/test.csproj"
+COPY ["test.csproj", "."]
+RUN dotnet restore "test.csproj"
 COPY . .
-WORKDIR "/src/test"
+WORKDIR "/src"
 RUN dotnet build "test.csproj" -c Release -o /app
 
 FROM build AS publish
