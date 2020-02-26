@@ -1,18 +1,12 @@
-FROM microsoft/dotnet:2.2-aspnetcore-runtime AS base
+FROM mcr.azk8s.cn/dotnet/core/sdk:3.1 AS build-env
 WORKDIR /app
-EXPOSE 80
-
-FROM microsoft/dotnet:2.2-sdk AS build
-WORKDIR /src
 COPY ["test.csproj", "."]
 RUN dotnet restore "test.csproj"
 COPY . .
-RUN dotnet build "test.csproj" -c Release -o /app
+RUN dotnet publish "test.csproj" -c Release -o /out
 
-FROM build AS publish
-RUN dotnet publish "test.csproj" -c Release -o /app
-
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app .
+FROM mcr.azk8s.cn/dotnet/core/aspnet:3.1
+WORKDIR /src
+EXPOSE 80
+COPY --from=build-env /out .
 ENTRYPOINT ["dotnet", "test.dll"]

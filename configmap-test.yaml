@@ -8,7 +8,7 @@ data:
   config.json: |
     {
       "config": {
-        "message": "v1.1" 
+        "message": "v1" 
       }
     }
 ---
@@ -19,9 +19,11 @@ metadata:
 spec:
   selector:
     app: configmap-test
+  type: NodePort
   ports:
     - port: 80
       targetPort: 80
+      nodePort: 31080
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -38,16 +40,16 @@ spec:
     spec:
       containers:
         - name: configmap-test
-          image: expcat/configmap-test:1.1
+          image: expcat/configmap-test:1.2
           resources:
             limits:
               memory: "128Mi"
-              cpu: "500m"
+              cpu: "100m"
           ports:
             - containerPort: 80
           volumeMounts:
             - name: config
-              mountPath: /app/conf
+              mountPath: /src/conf
       volumes:
         - name: config
           configMap:
