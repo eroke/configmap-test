@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: configmap-test
+  name: configmapreload-test
   labels:
-    app: configmap-test
+    app: configmapreload-test
 data:
   config.json: |
     {
@@ -12,35 +12,22 @@ data:
       }
     }
 ---
-kind: Service
-apiVersion: v1
-metadata:
-  name: configmap-test
-spec:
-  selector:
-    app: configmap-test
-  type: NodePort
-  ports:
-    - port: 80
-      targetPort: 80
-      nodePort: 31080
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: configmap-test
+  name: configmapreload-test
 spec:
   selector:
     matchLabels:
-      app: configmap-test
+      app: configmapreload-test
   template:
     metadata:
       labels:
-        app: configmap-test
+        app: configmapreload-test
     spec:
       containers:
-        - name: configmap-test
-          image: expcat/configmap-test:1.2
+        - name: configmapreload-test
+          image: configmapreloadtest:1.0.0
           env: 
             - name: DOTNET_USE_POLLING_FILE_WATCHER
               value: "true"
@@ -52,8 +39,8 @@ spec:
             - containerPort: 80
           volumeMounts:
             - name: config
-              mountPath: /src/conf
+              mountPath: /app/conf
       volumes:
         - name: config
           configMap:
-            name: configmap-test
+            name: configmapreload-test
